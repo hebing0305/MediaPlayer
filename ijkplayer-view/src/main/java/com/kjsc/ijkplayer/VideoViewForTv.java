@@ -54,6 +54,30 @@ public class VideoViewForTv extends IjkVideoView {
         seekBar = findViewById(R.id.seek_bar);
         ivPlayStatus = findViewById(R.id.play_status);
         control = findViewById(R.id.control);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int duration = getDuration();
+                if (duration != seekBar.getMax()) {
+                    String allTime = millis2String(duration);
+                    seekBar.setMax(duration);
+                    tvAllTime.setText(allTime);
+                }
+
+                String curTime = millis2String(progress);
+                tvNowTime.setText(curTime);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         setUserControl(true);
         setControlFocus(true);
     }
@@ -70,18 +94,8 @@ public class VideoViewForTv extends IjkVideoView {
             switch (msg.what) {
                 case UPDATE_WHAT:
                     if (isPlaying()) {
-                        int duration = getDuration();
-                        if (duration != seekBar.getMax()) {
-                            String allTime = millis2String(duration);
-                            seekBar.setMax(duration);
-                            tvAllTime.setText(allTime);
-                        }
-
-                        int currentPosition = getCurrentPosition();
-                        String curTime = millis2String(currentPosition);
-                        tvNowTime.setText(curTime);
                         if (!isSeek) {
-                            seekBar.setProgress(currentPosition);
+                            seekBar.setProgress(getCurrentPosition());
                         }
                     }
                     handler.sendEmptyMessageDelayed(UPDATE_WHAT, 500);

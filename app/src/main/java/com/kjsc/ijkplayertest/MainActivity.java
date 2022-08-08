@@ -4,10 +4,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kjsc.ijkplayer.IjkVideoView;
+import com.kjsc.ijkplayer.MediaPlayerConfig;
 import com.kjsc.ijkplayer.VideoViewForTv;
 
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
     //    String url = "http://219.152.49.2:8088/kjsc/2021041616341064975767.mp4";//4k视频
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mVideoView = findViewById(R.id.ijkplayer);
         mVideoView.setVideoPath(url);
-        mVideoView.setHudView(findViewById(R.id.table_layout));
+        mVideoView.getConfig().setPlayerCore(MediaPlayerConfig.PLAYER_CORE_ANDROID);
     }
 
     @Override

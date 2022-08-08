@@ -1,3 +1,4 @@
 include ':ijkplayer-view'
 include ':app'
 rootProject.name = "ijkplayer"
+include ':ijkplayer-java'

@@ -4,7 +4,7 @@ public class MediaPlayerConfig {
     public static final int PLAYER_CORE_ANDROID = 0;
     public static final int PLAYER_CORE_IJK_PLAYER = 1;
     boolean isMediaCodec = true;
-    int playerCore = PLAYER_CORE_ANDROID;
+    int playerCore = PLAYER_CORE_IJK_PLAYER;
     boolean isLooping = true;
 
     public boolean isMediaCodec() {
