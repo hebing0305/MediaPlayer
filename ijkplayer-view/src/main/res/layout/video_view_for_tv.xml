@@ -18,34 +18,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textColor="#FFBEBEBE"
+            android:textSize="18sp" />
 
         <SeekBar
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:progressTint="#ffffff"
-            android:thumbTint="#ffffff"
             android:background="@android:color/transparent"
             android:focusable="true"
-            android:paddingHorizontal="20dp" />
+            android:paddingHorizontal="20dp"
+            android:progressTint="#ffffff"
+            android:thumbTint="#ffffff" />
 
         <TextView
             android:id="@+id/allTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textColor="#FFBEBEBE"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/play_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@drawable/progress_bar_bg"
+        android:scaleType="center"
         android:src="@mipmap/icon_player"
         android:visibility="gone" />
 </FrameLayout>
