@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mVideoView = findViewById(R.id.ijkplayer);
-        mVideoView.setPlayerType(0);
         mVideoView.setVideoPath(url);
         mVideoView.setHudView(findViewById(R.id.table_layout));
     }

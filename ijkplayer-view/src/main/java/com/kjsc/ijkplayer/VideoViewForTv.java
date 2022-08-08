@@ -55,6 +55,7 @@ public class VideoViewForTv extends IjkVideoView {
         ivPlayStatus = findViewById(R.id.play_status);
         control = findViewById(R.id.control);
         setUserControl(true);
+        setControlFocus(true);
     }
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");

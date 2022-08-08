@@ -307,13 +307,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
         try {
             mMediaPlayer = createPlayer();
-
+            mMediaPlayer.setLooping(config.isLooping);
             // TODO: create SubtitleController in MediaPlayer, but we need
-            // a context for the subtitle renderers
-            final Context context = getContext();
-            // REMOVED: SubtitleController
-
-            // REMOVED: mAudioSession
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -846,40 +841,28 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         setRender(mCurrentRender);
     }
 
+    MediaPlayerConfig config = new MediaPlayerConfig();
 
-    int playerType = 1;
-
-    /**
-     * @param type 0:Android 1:ijkplayer
-     */
-    public void setPlayerType(int type) {
-        this.playerType = type;
-    }
-
-    boolean isMediaCodec = true;
-
-    public void setMediaCodec(boolean mediaCodec) {
-        isMediaCodec = mediaCodec;
+    public MediaPlayerConfig getConfig() {
+        return config;
     }
 
     public IMediaPlayer createPlayer() {
-        System.out.println("createPlayer playerType=" + playerType);
         IMediaPlayer mediaPlayer = null;
-
-        switch (playerType) {
-            case 0: {
+        switch (config.playerCore) {
+            case MediaPlayerConfig.PLAYER_CORE_ANDROID: {
                 AndroidMediaPlayer androidMediaPlayer = new AndroidMediaPlayer();
                 mediaPlayer = androidMediaPlayer;
             }
             break;
-            case 1:
+            case MediaPlayerConfig.PLAYER_CORE_IJK_PLAYER:
             default: {
                 IjkMediaPlayer ijkMediaPlayer = null;
                 if (mUri != null) {
                     ijkMediaPlayer = new IjkMediaPlayer();
                     ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_WARN);
                     //播放优化
-                    if (isMediaCodec) {
+                    if (config.isMediaCodec) {
                         //硬件解码
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
