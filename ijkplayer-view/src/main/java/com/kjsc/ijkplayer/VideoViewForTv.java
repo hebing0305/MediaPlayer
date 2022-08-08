@@ -27,8 +27,6 @@ public class VideoViewForTv extends IjkVideoView {
     boolean isUpdateSeekBar = true;
     ImageView ivPlayStatus;
     LinearLayout control;
-    FrameLayout title_root;
-    TextView title;
 
     public static final int UPDATE_WHAT = 0;
     public static final int HIDE_PLAY_STATUS_WHAT = 1;
@@ -55,8 +53,6 @@ public class VideoViewForTv extends IjkVideoView {
         tvAllTime = findViewById(R.id.allTime);
         seekBar = findViewById(R.id.seek_bar);
         ivPlayStatus = findViewById(R.id.play_status);
-        title = findViewById(R.id.title);
-        title_root = findViewById(R.id.title_root);
         control = findViewById(R.id.control);
         isShowControl(false);
         setFocusable(true);
@@ -165,15 +161,10 @@ public class VideoViewForTv extends IjkVideoView {
 
     public void isShowControl(boolean isShow) {
         control.setVisibility(isShow ? VISIBLE : INVISIBLE);
-        title_root.setVisibility(isShow ? VISIBLE : INVISIBLE);
         if (isShow) {
             seekBar.requestFocus();
             handler.sendEmptyMessageDelayed(HIDE_CONTROL_WHAT, 3000);
         }
-    }
-
-    public void setTitle(String title) {
-        this.title.setText(title);
     }
 
     boolean isNoControl = false;

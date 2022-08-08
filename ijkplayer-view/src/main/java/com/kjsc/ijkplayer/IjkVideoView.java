@@ -20,7 +20,10 @@ package com.kjsc.ijkplayer;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -195,6 +198,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         addView(renderUIView);
 
         progressBar = new ProgressBar(getContext());
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         addView(progressBar, params);
@@ -814,7 +818,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             // IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
-    private int mCurrentAspectRatio = s_allAspectRatio[0];
+    private int mCurrentAspectRatio = s_allAspectRatio[1];
 
     //-------------------------
     // Extend: Render
