@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 android {
@@ -30,4 +31,20 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     api project(path: ':ijkplayer-java')
 //    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.kjsc'
+                artifactId = 'mediaplayer'
+                version = android.defaultConfig.versionName
+            }
+        }
+    }
 }
