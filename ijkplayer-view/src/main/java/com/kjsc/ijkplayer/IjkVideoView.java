@@ -197,7 +197,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         addView(renderUIView);
 
         progressBar = new ProgressBar(getContext());
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+//        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         addView(progressBar, params);
