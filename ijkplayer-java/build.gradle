@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 32
         consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {

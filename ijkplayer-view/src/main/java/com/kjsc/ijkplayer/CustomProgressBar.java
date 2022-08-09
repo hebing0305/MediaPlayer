@@ -162,10 +162,10 @@ public class CustomProgressBar extends View implements TimeBar {
     private ValueAnimator scrubberScalingAnimator;
     private float scrubberScale;
     private boolean scrubberPaddingDisabled;
-    private boolean scrubbing;
+    public boolean scrubbing;
     private long scrubPosition;
-    private long duration;
-    private long position;
+    public long duration;
+    public long position;
     private long bufferedPosition;
     private int adGroupCount;
     @Nullable

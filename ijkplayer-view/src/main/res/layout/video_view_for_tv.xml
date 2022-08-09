@@ -18,26 +18,23 @@
             android:id="@+id/nowTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00"
+            android:text="00:00:00"
             android:textColor="#FFBEBEBE"
             android:textSize="18sp" />
 
-        <SeekBar
+        <com.kjsc.ijkplayer.CustomProgressBar
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
             android:focusable="true"
-            android:paddingHorizontal="20dp"
-            android:progressTint="#ffffff"
-            android:thumbTint="#ffffff" />
+            android:paddingHorizontal="20dp" />
 
         <TextView
             android:id="@+id/allTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00"
+            android:text="00:00:00"
             android:textColor="#FFBEBEBE"
             android:textSize="18sp" />
     </LinearLayout>

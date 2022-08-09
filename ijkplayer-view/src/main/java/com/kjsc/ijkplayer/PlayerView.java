@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -14,67 +15,69 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.ui.TimeBar;
+
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 
-public class VideoViewForTv extends IjkVideoView {
+public class PlayerView extends IjkVideoView {
     TextView tvNowTime, tvAllTime;
-    SeekBar seekBar;
-    boolean isSeek = false;
+    CustomProgressBar seekBar;
     ImageView ivPlayStatus;
     LinearLayout control;
-
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
     int controlTimeout = 5000;
 
     public static final int UPDATE_WHAT = 0;
     public static final int HIDE_CONTROL_WHAT = 2;
 
-    public VideoViewForTv(@NonNull Context context) {
+    public PlayerView(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public VideoViewForTv(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public PlayerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public VideoViewForTv(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PlayerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     public void init() {
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
         LayoutInflater.from(getContext()).inflate(R.layout.video_view_for_tv, this);
         tvNowTime = findViewById(R.id.nowTime);
         tvAllTime = findViewById(R.id.allTime);
         seekBar = findViewById(R.id.seek_bar);
         ivPlayStatus = findViewById(R.id.play_status);
         control = findViewById(R.id.control);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.addListener(new TimeBar.OnScrubListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int duration = getDuration();
-                if (duration != seekBar.getMax()) {
-                    String allTime = millis2String(duration);
-                    seekBar.setMax(duration);
-                    tvAllTime.setText(allTime);
-                }
+            public void onScrubStart(TimeBar timeBar, long position) {
+                System.out.println(">>>>>>onScrubStart");
+            }
 
-                String curTime = millis2String(progress);
+            @Override
+            public void onScrubMove(TimeBar timeBar, long position) {
+                System.out.println(">>>>>>onScrubMove");
+                String curTime = millis2String(position);
                 tvNowTime.setText(curTime);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                System.out.println(">>>>>>onScrubStop position=" + position);
+                seekTo((int) position);
+                start();
 
             }
         });
@@ -82,9 +85,9 @@ public class VideoViewForTv extends IjkVideoView {
         setControlFocus(true);
     }
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
 
     public String millis2String(long mills) {
+
         return simpleDateFormat.format(new Date(mills));
     }
 
@@ -94,9 +97,13 @@ public class VideoViewForTv extends IjkVideoView {
             switch (msg.what) {
                 case UPDATE_WHAT:
                     if (isPlaying()) {
-                        if (!isSeek) {
-                            seekBar.setProgress(getCurrentPosition());
+                        if (!seekBar.scrubbing) {
+                            seekBar.setPosition(getCurrentPosition());
+                            String curTime = millis2String(seekBar.position);
+                            tvNowTime.setText(curTime);
                         }
+                        seekBar.setBufferedPosition((long) ((getBufferPercentage() / 100f) * seekBar.duration));
+                        System.out.println(">>>>>>getBufferPercentage()=" + getBufferPercentage());
                     }
                     handler.sendEmptyMessageDelayed(UPDATE_WHAT, 500);
                     break;
@@ -112,6 +119,10 @@ public class VideoViewForTv extends IjkVideoView {
     public void onPrepared(IMediaPlayer mp) {
         super.onPrepared(mp);
         start();
+        int duration = getDuration();
+        String allTime = millis2String(duration);
+        seekBar.setDuration(duration);
+        tvAllTime.setText(allTime);
         handler.sendEmptyMessage(UPDATE_WHAT);
         showControl();
     }
@@ -126,10 +137,6 @@ public class VideoViewForTv extends IjkVideoView {
             int keycode = event.getKeyCode();
             if (action == KeyEvent.ACTION_DOWN) {
                 switch (keycode) {
-                    case KeyEvent.KEYCODE_DPAD_LEFT:
-                    case KeyEvent.KEYCODE_DPAD_RIGHT:
-                        isSeek = true;
-                        break;
                     case KeyEvent.KEYCODE_DPAD_CENTER:
                     case KeyEvent.KEYCODE_ENTER:
                         if (isPlaying()) {
@@ -138,15 +145,6 @@ public class VideoViewForTv extends IjkVideoView {
                             start();
                         }
                         return true;
-                }
-            } else if (action == KeyEvent.ACTION_UP) {
-                switch (keycode) {
-                    case KeyEvent.KEYCODE_DPAD_LEFT:
-                    case KeyEvent.KEYCODE_DPAD_RIGHT:
-                        isSeek = false;
-                        seekTo(seekBar.getProgress());
-                        start();
-                        break;
                 }
             }
         }

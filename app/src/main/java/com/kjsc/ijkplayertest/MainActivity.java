@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kjsc.ijkplayer.MediaPlayerConfig;
-import com.kjsc.ijkplayer.VideoViewForTv;
+import com.kjsc.ijkplayer.PlayerView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,8 +15,9 @@ public class MainActivity extends AppCompatActivity {
     //http://vjs.zencdn.net/v/oceans.mp4
 //    String url = "http://219.152.49.2:8088/kjsc/2021040916235592619742.mp4";
 //    String url = "http://219.152.49.2:8088/kjsc/2021041616565171623286.mp4";//高帧率视频
-    String url = "http://192.168.180.243:8080/static/manuvideo_root/066c88d71f50fd7927859e13475fa187ccc6bb4d_manu_4635.0_4861.0.mp4";
-    VideoViewForTv mVideoView;
+//    String url = "http://192.168.180.243:8080/static/manuvideo_root/066c88d71f50fd7927859e13475fa187ccc6bb4d_manu_4635.0_4861.0.mp4";
+    String url = "http://192.168.180.243:8080/static/video/hnlv/08e1b18bd265b211181fde1938f5baacdfcd7bb4.mp4";
+    PlayerView mVideoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mVideoView = findViewById(R.id.ijkplayer);
         mVideoView.setVideoPath(url);
-        mVideoView.getConfig().setPlayerCore(MediaPlayerConfig.PLAYER_CORE_ANDROID);
+        mVideoView.setControlTimeout(-1);
+//        mVideoView.getConfig().setPlayerCore(MediaPlayerConfig.PLAYER_CORE_ANDROID);
     }
 
     @Override
