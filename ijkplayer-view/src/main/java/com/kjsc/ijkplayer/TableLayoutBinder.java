@@ -17,6 +17,7 @@
 
 package com.kjsc.ijkplayer;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 
 public class TableLayoutBinder {
     private Context mContext;

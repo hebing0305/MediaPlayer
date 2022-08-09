@@ -43,7 +43,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -479,37 +478,6 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                         }
                     }
 
-                    /* Otherwise, pop up an error dialog so the user knows that
-                     * something bad has happened. Only try and pop up the dialog
-                     * if we're attached to a window. When we're going away and no
-                     * longer have a window, don't bother showing the user an error.
-                     */
-                    if (getWindowToken() != null) {
-                        Resources r = mAppContext.getResources();
-                        int messageId;
-
-                        if (framework_err == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK) {
-                            messageId = R.string.VideoView_error_text_invalid_progressive_playback;
-                        } else {
-                            messageId = R.string.VideoView_error_text_unknown;
-                        }
-
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(messageId)
-                                .setPositiveButton(R.string.VideoView_error_button,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                /* If we get here, there is no onError listener, so
-                                                 * at least inform them that the video is over.
-                                                 */
-                                                if (mVideoListener != null) {
-                                                    mVideoListener.onCompletion(mMediaPlayer);
-                                                }
-                                            }
-                                        })
-                                .setCancelable(false)
-                                .show();
-                    }
                     return true;
                 }
             };
@@ -1012,11 +980,6 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                 }
             }
         }
-
-        AlertDialog.Builder adBuilder = builder.buildAlertDialogBuilder();
-        adBuilder.setTitle(R.string.media_information);
-        adBuilder.setNegativeButton(R.string.close, null);
-        adBuilder.show();
     }
 
     private String buildResolution(int width, int height, int sarNum, int sarDen) {

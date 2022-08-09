@@ -11,8 +11,7 @@ android {
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -28,10 +27,8 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation project(path: ':ijkplayer-view')
+    implementation 'androidx.fragment:fragment:1.5.1'
+    implementation("androidx.multidex:multidex:2.0.1")
 //    implementation 'com.github.hebing0305.MediaPlayer:ijkplayer-view:2.0'
-}
-repositories {
-    mavenCentral()
 }

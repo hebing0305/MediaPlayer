@@ -2,13 +2,12 @@ package com.kjsc.ijkplayertest;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
-import com.kjsc.ijkplayer.MediaPlayerConfig;
 import com.kjsc.ijkplayer.PlayerView;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
     //    String url = "http://219.152.49.2:8088/kjsc/2021041616341064975767.mp4";//4k视频
     //        String url = "https://media.w3.org/2010/05/sintel/trailer.mp4";
     //http://219.152.49.2:8088/kjsc/2021040916235592619742.mp4
