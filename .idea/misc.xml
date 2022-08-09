@@ -6,7 +6,8 @@
         <entry key="..\:/Code/Android/Git/test/ijkplayer/app/src/main/res/layout/activity_main.xml" value="0.2760416666666667" />
         <entry key="..\:/Code/Android/Git/test/ijkplayer/ijkplayer-view/src/main/res/drawable/progress_bar_bg.xml" value="0.2765" />
         <entry key="..\:/Code/Android/Git/test/ijkplayer/ijkplayer-view/src/main/res/layout/exo_player_control_view.xml" value="0.4354166666666667" />
-        <entry key="..\:/Code/Android/Git/test/ijkplayer/ijkplayer-view/src/main/res/layout/video_view_for_tv.xml" value="0.2760416666666667" />
+        <entry key="..\:/Code/Android/Git/test/ijkplayer/ijkplayer-view/src/main/res/layout/player_view.xml" value="0.325" />
+        <entry key="..\:/Code/Android/Git/test/ijkplayer/ijkplayer-view/src/main/res/layout/video_view_for_tv.xml" value="0.75" />
       </map>
     </option>
   </component>

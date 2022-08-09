@@ -2,7 +2,7 @@ package com.kjsc.ijkplayer;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-public abstract class VideoListener implements IMediaPlayer.OnPreparedListener,
+public abstract class PlayerListener implements IMediaPlayer.OnPreparedListener,
         IMediaPlayer.OnCompletionListener,
         IMediaPlayer.OnErrorListener,
         IMediaPlayer.OnInfoListener {

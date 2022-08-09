@@ -23,6 +23,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
 
 }
 
@@ -30,6 +33,7 @@ dependencies {
     api project(path: ':ijkplayer-java')
     api 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
     api 'com.google.android.exoplayer:exoplayer-core:2.18.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
 }
 
 afterEvaluate {

@@ -1,36 +1,30 @@
 package com.kjsc.ijkplayer;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ui.TimeBar;
+import com.kjsc.ijkplayer.databinding.PlayerViewBinding;
 
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.Date;
-import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 
 public class PlayerView extends IjkVideoView {
-    TextView tvNowTime, tvAllTime;
-    CustomProgressBar seekBar;
-    ImageView ivPlayStatus;
-    LinearLayout control;
+    PlayerViewBinding binding;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
     int controlTimeout = 5000;
 
@@ -53,41 +47,71 @@ public class PlayerView extends IjkVideoView {
     }
 
     public void init() {
+        binding = PlayerViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
-        LayoutInflater.from(getContext()).inflate(R.layout.video_view_for_tv, this);
-        tvNowTime = findViewById(R.id.nowTime);
-        tvAllTime = findViewById(R.id.allTime);
-        seekBar = findViewById(R.id.seek_bar);
-        ivPlayStatus = findViewById(R.id.play_status);
-        control = findViewById(R.id.control);
-        seekBar.addListener(new TimeBar.OnScrubListener() {
-            @Override
-            public void onScrubStart(TimeBar timeBar, long position) {
-                System.out.println(">>>>>>onScrubStart");
-            }
-
-            @Override
-            public void onScrubMove(TimeBar timeBar, long position) {
-                System.out.println(">>>>>>onScrubMove");
-                String curTime = millis2String(position);
-                tvNowTime.setText(curTime);
-            }
-
-            @Override
-            public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
-                System.out.println(">>>>>>onScrubStop position=" + position);
-                seekTo((int) position);
-                start();
-
-            }
-        });
+        LayoutInflater.from(getContext()).inflate(R.layout.player_view, this);
         setUserControl(true);
         setControlFocus(true);
+        addListener(listener);
+        binding.seekBar.addListener(onScrubListener);
     }
 
+    TimeBar.OnScrubListener onScrubListener = new TimeBar.OnScrubListener() {
+        @Override
+        public void onScrubStart(TimeBar timeBar, long position) {
+            System.out.println(">>>>>>onScrubStart");
+        }
+
+        @Override
+        public void onScrubMove(TimeBar timeBar, long position) {
+            System.out.println(">>>>>>onScrubMove");
+            String curTime = millis2String(position);
+            binding.nowTime.setText(curTime);
+        }
+
+        @Override
+        public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+            System.out.println(">>>>>>onScrubStop position=" + position);
+            seekTo((int) position);
+            start();
+        }
+    };
+
+    PlayerListener listener = new PlayerListener() {
+        @Override
+        public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
+            switch (i) {
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
+                    binding.progressbar.setVisibility(VISIBLE);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
+                    binding.progressbar.setVisibility(GONE);
+                    break;
+            }
+            return super.onInfo(iMediaPlayer, i, i1);
+        }
+
+        @Override
+        public void onPrepared(IMediaPlayer mp) {
+            super.onPrepared(mp);
+            start();
+            int duration = getDuration();
+            String allTime = millis2String(duration);
+            binding.seekBar.setDuration(duration);
+            binding.allTime.setText(allTime);
+            handler.sendEmptyMessage(UPDATE_WHAT);
+            showControl();
+            binding.progressbar.setVisibility(GONE);
+        }
+    };
+
+    @Override
+    public void setVideoURI(Uri uri, Map<String, String> headers) {
+        super.setVideoURI(uri, headers);
+        binding.progressbar.setVisibility(VISIBLE);
+    }
 
     public String millis2String(long mills) {
-
         return simpleDateFormat.format(new Date(mills));
     }
 
@@ -97,12 +121,12 @@ public class PlayerView extends IjkVideoView {
             switch (msg.what) {
                 case UPDATE_WHAT:
                     if (isPlaying()) {
-                        if (!seekBar.scrubbing) {
-                            seekBar.setPosition(getCurrentPosition());
-                            String curTime = millis2String(seekBar.position);
-                            tvNowTime.setText(curTime);
+                        if (!binding.seekBar.scrubbing) {
+                            binding.seekBar.setPosition(getCurrentPosition());
+                            String curTime = millis2String(binding.seekBar.position);
+                            binding.nowTime.setText(curTime);
                         }
-                        seekBar.setBufferedPosition((long) ((getBufferPercentage() / 100f) * seekBar.duration));
+                        binding.seekBar.setBufferedPosition((long) ((getBufferPercentage() / 100f) * binding.seekBar.duration));
                         System.out.println(">>>>>>getBufferPercentage()=" + getBufferPercentage());
                     }
                     handler.sendEmptyMessageDelayed(UPDATE_WHAT, 500);
@@ -116,21 +140,7 @@ public class PlayerView extends IjkVideoView {
     });
 
     @Override
-    public void onPrepared(IMediaPlayer mp) {
-        super.onPrepared(mp);
-        start();
-        int duration = getDuration();
-        String allTime = millis2String(duration);
-        seekBar.setDuration(duration);
-        tvAllTime.setText(allTime);
-        handler.sendEmptyMessage(UPDATE_WHAT);
-        showControl();
-    }
-
-
-    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        System.out.println("dispatchKeyEvent isFocused=" + seekBar.isFocused());
         if (controlFocusable) {
             showControl();
             int action = event.getAction();
@@ -154,13 +164,13 @@ public class PlayerView extends IjkVideoView {
     @Override
     public void pause() {
         super.pause();
-        ivPlayStatus.setVisibility(VISIBLE);
+        binding.playStatus.setVisibility(VISIBLE);
     }
 
     @Override
     public void start() {
         super.start();
-        ivPlayStatus.setVisibility(GONE);
+        binding.playStatus.setVisibility(GONE);
     }
 
     public void setControlTimeout(int timeout) {
@@ -169,8 +179,8 @@ public class PlayerView extends IjkVideoView {
 
     public void showControl() {
         if (useControl) {
-            control.setVisibility(VISIBLE);
-            seekBar.requestFocus();
+            binding.control.setVisibility(VISIBLE);
+            binding.seekBar.requestFocus();
             if (controlTimeout > 0) {
                 handler.removeMessages(HIDE_CONTROL_WHAT);
                 handler.sendEmptyMessageDelayed(HIDE_CONTROL_WHAT, controlTimeout);
@@ -180,7 +190,7 @@ public class PlayerView extends IjkVideoView {
 
 
     public void hideControl() {
-        control.setVisibility(INVISIBLE);
+        binding.control.setVisibility(INVISIBLE);
     }
 
     boolean controlFocusable = true;
@@ -189,10 +199,10 @@ public class PlayerView extends IjkVideoView {
         controlFocusable = needControl;
         if (controlFocusable) {
             setFocusable(true);
-            seekBar.setFocusable(true);
+            binding.seekBar.setFocusable(true);
         } else {
             setFocusable(false);
-            seekBar.setFocusable(false);
+            binding.seekBar.setFocusable(false);
         }
     }
 
@@ -204,4 +214,5 @@ public class PlayerView extends IjkVideoView {
             setControlFocus(false);
         }
     }
+
 }
