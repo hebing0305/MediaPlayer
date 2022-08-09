@@ -27,9 +27,9 @@ android {
 }
 
 dependencies {
-//    implementation project(path: ':ijkplayer-view')
+    implementation project(path: ':ijkplayer-view')
     implementation 'androidx.fragment:fragment:1.5.1'
     implementation("androidx.multidex:multidex:2.0.1")
 //    implementation 'com.github.hebing0305:MediaPlayer:2.6'
-    implementation 'com.github.hebing0305.MediaPlayer:ijkplayer-view:2.0'
+//    implementation 'com.github.hebing0305.MediaPlayer:ijkplayer-view:2.0'
 }
