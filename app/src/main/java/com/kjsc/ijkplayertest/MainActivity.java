@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mVideoView = findViewById(R.id.ijkplayer);
         mVideoView.setVideoPath(url);
-        mVideoView.setControlTimeout(-1);
+//        mVideoView.setControlTimeout(-1);
 //        mVideoView.getConfig().setPlayerCore(MediaPlayerConfig.PLAYER_CORE_ANDROID);
     }
 
