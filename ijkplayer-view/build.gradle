@@ -8,8 +8,9 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 32
+        versionCode 1
+        versionName "2.5"
     }
 
     buildTypes {
