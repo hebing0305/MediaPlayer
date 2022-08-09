@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 32
-        versionCode 1
-        versionName "2.6"
+        versionCode 3
+        versionName "3.0"
     }
 
     buildTypes {
@@ -41,7 +41,7 @@ afterEvaluate {
                 from components.release
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.kjsc'
-                artifactId = 'ijkplayer'
+                artifactId = 'ijkplayer-view'
                 version = android.defaultConfig.versionName
             }
         }
