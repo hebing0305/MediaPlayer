@@ -28,8 +28,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         mVideoView = findViewById(R.id.ijkplayer);
         ArrayList<MediaItem> mediaItems = new ArrayList<>();
-        mediaItems.add(new MediaItem(url1));
-        mediaItems.add(new MediaItem(url2));
+//        mediaItems.add(new MediaItem(url1));
+//        mediaItems.add(new MediaItem(url2));
         mediaItems.add(new MediaItem(url3));
         mediaItems.add(new MediaItem(url4));
         mediaItems.add(new MediaItem(url5));

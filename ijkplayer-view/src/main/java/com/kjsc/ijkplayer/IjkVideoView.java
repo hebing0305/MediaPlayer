@@ -23,6 +23,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -42,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -215,12 +220,34 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         seekTo(pos);
     }
 
+    public static final int what = 0;
+
     public void setVideoIndex(int index) {
+        handler.removeMessages(what);
+        Message msg = new Message();
+        msg.what = what;
+        msg.obj = index;
+        long gapTime = System.currentTimeMillis() - setTime;
+        System.out.println("setVideoIndex gapTime=" + gapTime);
+        if (gapTime > 500) {
+            handler.sendMessage(msg);
+        } else {
+            handler.sendMessageDelayed(msg, 500);
+        }
+        setTime = System.currentTimeMillis();
+    }
+
+    long setTime = 0;
+    Handler handler = new Handler(msg -> {
+        int index = (int) msg.obj;
+        System.out.println("setVideoIndex index=" + index);
         if (index >= 0 && index < data.size()) {
             setVideoPath(data.get(index).getUrl());
             videoIndex = index;
         }
+        return false;
     }
+    );
 
     public void nextVideo() {
         videoIndex++;
