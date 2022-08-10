@@ -30,10 +30,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.kjsc.ijkplayer.model.MediaItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -201,6 +202,40 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         openVideo();
         requestLayout();
         invalidate();
+    }
+
+
+    ArrayList<MediaItem> data = new ArrayList<>();
+    int videoIndex = -1;
+
+    public void setVideoList(ArrayList<MediaItem> data, int index, int pos) {
+        this.data.clear();
+        this.data.addAll(data);
+        setVideoIndex(index);
+        seekTo(pos);
+    }
+
+    public void setVideoIndex(int index) {
+        if (index >= 0 && index < data.size()) {
+            setVideoPath(data.get(index).getUrl());
+            videoIndex = index;
+        }
+    }
+
+    public void nextVideo() {
+        videoIndex++;
+        if (videoIndex >= data.size()) {
+            videoIndex = 0;
+        }
+        setVideoIndex(videoIndex);
+    }
+
+    public void preVideo() {
+        videoIndex--;
+        if (videoIndex < 0) {
+            videoIndex = data.size() - 1;
+        }
+        setVideoIndex(videoIndex);
     }
 
     public void stopPlayback() {
