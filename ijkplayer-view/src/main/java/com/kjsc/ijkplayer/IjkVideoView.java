@@ -210,8 +210,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     }
 
 
-    ArrayList<MediaItem> data = new ArrayList<>();
-    int videoIndex = -1;
+    public ArrayList<MediaItem> data = new ArrayList<>();
+    public int videoIndex = -1;
 
     public void setVideoList(ArrayList<MediaItem> data, int index, int pos) {
         this.data.clear();
@@ -775,10 +775,5 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                 start();
             }
         }
-    }
-
-    public void stopAndRelease() {
-        stopPlayback();
-        release(true);
     }
 }

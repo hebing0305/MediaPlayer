@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.exoplayer2.ui.TimeBar;
 import com.kjsc.ijkplayer.databinding.PlayerViewBinding;
@@ -24,7 +26,7 @@ import java.util.TimeZone;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 
-public class PlayerView extends IjkVideoView {
+public class PlayerView extends IjkVideoView implements DefaultLifecycleObserver {
     PlayerViewBinding binding;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
     int controlTimeout = 5000;
@@ -216,4 +218,20 @@ public class PlayerView extends IjkVideoView {
         }
     }
 
+
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onResume(owner);
+
+    }
+
+    @Override
+    public void onPause(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onPause(owner);
+        stopPlayback();
+    }
+
+    public PlayerViewBinding getBinding(){
+        return binding;
+    }
 }
